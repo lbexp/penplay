@@ -38,23 +38,39 @@ void MouseClick(int x, int y) {
 
 int isConnected = 0;
 
-void initConnection() { isConnected = 1; }
+void InitConnection() { isConnected = 1; }
+
+void Listen(void (*cb)(char *)) {
+    // TODO: Add logic to listen and invokes callback with the correct payload
+    cb("test");
+}
+
+void ParseMouseMove(char *payload) {
+    // TODO: Add logic to parse payload into mouse move data
+    MouseMove(500, 500);
+}
 
 /*********************
  * Connection - end
  *********************/
 
-/*
+/*********************
  * Main - start
- */
+ *********************/
 
 int main() {
-    initConnection();
+    printf("Initialize connection...");
+    InitConnection();
+
+    if (isConnected) {
+        printf("Connected!");
+    }
 
     while (isConnected) {
-        MouseMove(500, 500);
-        printf("Hello world!");
+        Listen(ParseMouseMove);
     }
+
+    printf("Disconnected.");
 
     return 0;
 }
