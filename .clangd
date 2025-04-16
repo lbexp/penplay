@@ -1,0 +1,7 @@
+CompileFlags:
+  Add: [
+    "-I/opt/homebrew/opt/libusb/include",
+    "-L/opt/homebrew/opt/libusb/lib",
+  ]
+
+  
