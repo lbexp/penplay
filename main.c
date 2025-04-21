@@ -40,13 +40,18 @@ void MouseClick(int x, int y) {
 int isConnected = 0;
 
 void InitConnection(libusb_context *ctx, libusb_device_handle *dev) {
-    libusb_init(&ctx);
-    // TODO: Adjust the dummy vid & pid into actual vid & pid
-    dev = libusb_open_device_with_vid_pid(ctx, 0x18D1, 0x4EE7);
-    libusb_claim_interface(dev, 0);
+    printf("Initialize connection...");
 
-    if (dev) {
-        isConnected = 1;
+    while (!isConnected) {
+        libusb_init(&ctx);
+        // TODO: Adjust the dummy vid & pid into actual vid & pid
+        dev = libusb_open_device_with_vid_pid(ctx, 0x18D1, 0x4EE7);
+        libusb_claim_interface(dev, 0);
+
+        if (dev) {
+            isConnected = 1;
+            printf("Connected!");
+        }
     }
 }
 
@@ -69,16 +74,10 @@ void ParseMouseMove(char *payload) {
  *********************/
 
 int main() {
-    printf("Initialize connection...");
-
     libusb_context *ctx = NULL;
     libusb_device_handle *dev = NULL;
 
     InitConnection(ctx, dev);
-
-    if (isConnected) {
-        printf("Connected!");
-    }
 
     unsigned char data[64];
     int actualLength;
