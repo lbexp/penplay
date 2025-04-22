@@ -41,13 +41,15 @@ libusb_context *ctx = NULL;
 libusb_device_handle *dev = NULL;
 int isConnected = 0;
 
+#define GOOGLE_VID 0x18D1
+#define ANDROID_PID 0x2D00
+
 void InitConnection(libusb_context *ctx, libusb_device_handle *dev) {
     printf("Initialize connection...");
 
     while (!isConnected) {
         libusb_init(&ctx);
-        // TODO: Adjust the dummy vid & pid into actual vid & pid
-        dev = libusb_open_device_with_vid_pid(ctx, 0x18D1, 0x4EE7);
+        dev = libusb_open_device_with_vid_pid(ctx, GOOGLE_VID, ANDROID_PID);
         libusb_claim_interface(dev, 0);
 
         if (dev) {
