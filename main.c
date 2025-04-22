@@ -99,6 +99,11 @@ void Listen() {
 
     if (r == 0 && actualLength > 0) {
         PenData penData = ParseData((char *)data);
+        if (penData.touch) {
+            MouseClick(penData.x, penData.y);
+        } else {
+            MouseMove(penData.x, penData.y);
+        }
     } else {
         printf("Failed to received: %s\n", libusb_error_name(r));
     }
