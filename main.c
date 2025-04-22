@@ -3,6 +3,21 @@
 #include <stdio.h>
 
 /*********************
+ * Type definitions - start
+ *********************/
+
+typedef struct PenData {
+    uint16_t x;
+    uint16_t y;
+    uint8_t pressure;
+    uint8_t touch;
+} PenData;
+
+/*********************
+ * Type definitions - end
+ *********************/
+
+/*********************
  * Mouse functionalities - start
  *********************/
 
@@ -63,11 +78,15 @@ void InitConnection(libusb_context *ctx, libusb_device_handle *dev) {
 /**
  * Parsing 8 bytes of pen data
  */
-void ParseData(char *data) {
-    uint16_t x = data[0] | (data[1] << 8);
-    uint16_t y = data[2] | (data[3] << 8);
-    uint8_t pressure = data[4];
-    uint8_t touch = data[5];
+PenData ParseData(char *data) {
+    PenData penData;
+
+    penData.x = data[0] | (data[1] << 8);
+    penData.y = data[2] | (data[3] << 8);
+    penData.pressure = data[4];
+    penData.touch = data[5];
+
+    return penData;
 }
 
 void Listen() {
@@ -79,7 +98,7 @@ void Listen() {
                                   &actualLength, 1000);
 
     if (r == 0 && actualLength > 0) {
-        ParseData((char *)data);
+        PenData penData = ParseData((char *)data);
     } else {
         printf("Failed to received: %s\n", libusb_error_name(r));
     }
