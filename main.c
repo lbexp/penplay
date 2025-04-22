@@ -43,6 +43,7 @@ int isConnected = 0;
 
 #define GOOGLE_VID 0x18D1
 #define ANDROID_PID 0x2D00
+#define IN_ENDPOINT 0x81
 
 void InitConnection(libusb_context *ctx, libusb_device_handle *dev) {
     printf("Initialize connection...");
@@ -72,10 +73,9 @@ void ParseData(char *data) {
 void Listen() {
     unsigned char data[64];
     int actualLength;
-    int endpoint = 0x81;
     int r;
 
-    r = libusb_interrupt_transfer(dev, endpoint, data, sizeof(data),
+    r = libusb_interrupt_transfer(dev, IN_ENDPOINT, data, sizeof(data),
                                   &actualLength, 1000);
 
     if (r == 0 && actualLength > 0) {
